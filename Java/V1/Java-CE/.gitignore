@@ -1,0 +1,13 @@
+**/*.iml
+**/.idea
+**/.gradle
+dependency-reduced-pom.xml
+
+
+#Gradle temporary files
+target/
+
+# Temporary Files
+temp/
+
+*.class

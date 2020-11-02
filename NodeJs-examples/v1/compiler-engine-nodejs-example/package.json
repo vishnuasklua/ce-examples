@@ -1,0 +1,27 @@
+{
+  "name": "compiler-engine-nodejs-example",
+  "description": "This is a nodejs example project for Compiler-Engine Compiler API integration",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Compiler Engine",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "morgan": "~1.9.1",
+    "qs": "^6.9.4"
+  },
+  "bugs": {
+    "url": "https://github.com/vishnuasklua/ce-examples/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vishnuasklua/ce-examples.git"
+  },
+  "homepage": "https://github.com/vishnuasklua/ce-examples"
+}

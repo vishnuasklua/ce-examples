@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="javascripts/jquery.min.js"></script>
+<style type="text/css">
+  html {
+    font-family: Poppins,sans-serif;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+  label {
+    width: 200px;
+    display: inline-block;
+  }
+
+  input, textarea {
+    display: inline-block;
+  }
+
+  .output {
+    font-family: monospace;
+    white-space: pre-line;
+    border: 1px solid #ddd;
+    background: #eee;
+    min-height: 150px;
+    width: 490px;
+    padding: 5px;
+  }
+
+  h3 {
+    margin-top: 0;
+    padding: 0;
+  }
+  .selectlang {
+    width: 300px;
+    height: 30px;
+    border-radius: 4px;
+  }
+  .button {
+    border-radius: 6px;
+    padding: 8px 20px;
+    color: white;
+    background: #6772e5;
+    border: 1px solid #6772e5;
+    width: fit-content;
+    cursor: pointer;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
+    height: fit-content;
+  }
+  .CodeMirror {
+    border: 1px solid #ddd;
+    width: 500px;
+    height: 200px !important;
+    border-radius: 3px;
+  }
+</style>
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&amp;display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css" rel="stylesheet" />
+</head>
+
+<body>
+
+<div style="margin-bottom: 25px;">
+  <a href='javascrip:;' style="text-decoration: none; color: #6772e5;">
+    <img style="height:25px; margin-right: 10px; display: inline-block;"
+         src="https://compilerengine.s3.ap-south-1.amazonaws.com/images/compiler-engine-icon.svg" alt="Compiler Engine" />
+    <span>Compiler Engine</span>
+  </a>
+</div>
+
+<div style="margin-bottom: 15px;">
+  Compiler engine client demo for code compilation
+</div>
+
+<div style="margin-bottom: 15px;">
+  <label>Language ID <a href="https://www.compiler-engine.com/supported-languages">(list)</a>:</label>
+  <select class="selectlang" name="compilerId" id="compilerId">
+    <option value="0">Select Language</option>
+    <option value="4">Python2 (2.7.18rc1)</option>
+    <option value="116">Python3 (3.8.2)</option>
+    <option value="56">Javascript(Node v10.19.0)</option>
+    <option value="11">C (gcc 9.3)</option>
+    <option value="10">Java (openjdk 13.0.3)</option>
+    <option value="114">Go (go 1.13.8)</option>
+    <option value="3">Perl (perl 5.30.0)</option>
+    <option value="17">Ruby (ruby 2.7)</option>
+    <option value="44">C++ (gcc 9.3)</option>
+    <option value="27">C# (gmcs 6.8)</option>
+    <option value="93">Rust (rust 1.46.0)</option>
+    <option value="57">Typescript (tsc 4.0)</option>
+    <option value="26">Lua (luac 5.3.3)</option>
+    <option value="39">Scala (scala 2.13.3)</option>
+  </select>
+</div>
+
+<div style="margin-bottom: 25px;">
+  <label>Source:</label>
+  <textarea id="source" style="border-radius: 4px; width: 295px;">
+# Simple python program to print a statement
+#    inside of while n times
+count = int(input())
+print("Before while")
+while (count > 0):
+    print("Inside while")
+    count = count - 1
+print("Exited while")
+  </textarea>
+</div>
+
+<div style="margin-bottom: 25px;">
+  <label>Input:</label>
+  <textarea id="input" style="border-radius: 4px; width: 295px;">
+2
+  </textarea>
+</div>
+
+<div style="margin-bottom: 35px; display:flex">
+  <label></label>
+  <div>
+    <input class="button" id="send" type="button" value="Compile">
+  </div>
+</div>
+
+
+<!-- output box -->
+<div style="margin-bottom: 15px;">
+  <div>Stdout</div>
+  <p class="output" id="output">Output appears here</p>
+</div>
+
+<div style="margin-bottom: 15px;">
+  <div>Server Errors</div>
+  <p class="output" id="error">error appears here</p>
+</div>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.js'></script>
+<script src="https://codemirror.net/mode/python/python.js"></script>
+
+<script type="text/javascript">
+
+  //COMPILE USER GIVEN source
+  $('#send').on('click', function () {
+    const compilerId = $('#compilerId').val();
+    const sourceF = $('#source').val();
+    const input = $('#input').val();
+
+    const json = {
+      compilerId: compilerId,
+      source: sourceF,
+      input: input
+    };
+
+    $.post("/submit", json, function (data, error, xhr) {
+      document.getElementById("output").innerHTML = data.response;
+      document.getElementById("error").innerHTML = data.error;
+    });
+  });
+
+  // codemirror - source code
+  var editor = CodeMirror.fromTextArea(document.getElementById('source'), {
+    mode: "python",
+    lineNumbers: true,
+  });
+
+  // codemirror - input/stdin
+  var editor = CodeMirror.fromTextArea(document.getElementById('input'), {
+    mode: "",
+    lineNumbers: false,
+  });
+
+</script>
+
+</body>
+</html>

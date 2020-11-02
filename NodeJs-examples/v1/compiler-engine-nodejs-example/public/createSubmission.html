@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css">
+    label {
+        width: 200px;
+        display: inline-block;
+        float: left;
+    }
+
+    input, textarea {
+        display: inline-block;
+    }
+
+    .output {
+        font-family: monospace;
+        white-space: pre-line;
+        border: 1px solid #ccc;
+        background: #eee;
+        min-height: 50px;
+    }
+
+    h3 {
+        margin-top: 0;
+        padding: 0;
+    }
+</style>
+
+<body>
+<p>
+    This is an example client to demo the Compiler-Engine compiling.
+</p>
+<h3>source Compile</h3>
+<!-- getiing the id of the language -->
+<label>Language ID <a href="#" id="langhelp">(list)</a>:</label>
+<input id="compilerId" type='text' value=0>
+<br>
+<label>source:</label>
+<textarea id="source">
+import time
+
+count = 3
+print("before while")
+while(count>0):
+    print("inside while")
+    count = count - 1
+</textarea>
+<br>
+<br>
+<!-- creating box for input -->
+<label>input:</label>
+<textarea id="input">
+2
+3</textarea>
+
+
+<input id="send" type="button" value="Compile">
+<!-- output box -->
+<p class="output" id="output">Output appears here</p>
+
+<p class="output" id="error">error appears here</p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    //    //SHOW LANGUAGE sourceS TO USER ON CLICKING HELP LINK
+    //    $('#langhelp').on('click',function () {
+    //        var msg = "These are the languages and their compilerIds: \n[compilerId]: [LANGUAGE]\n";
+    //        var langs = [];
+    //        for (var i in LANGS)
+    //        {
+    //            msg += LANGS[i][0] + ": " + i +"\n";
+    //        }
+    //
+    //        alert(msg);
+    //    });
+
+    //COMPILE USER GIVEN source
+    $('#send').on('click', function () {
+        const compilerId = $('#compilerId').val();
+        const sourceF = $('#source').val();
+        const input = $('#input').val();
+
+        const json = {
+            compilerId: compilerId,
+            source: sourceF,
+            input: input
+        };
+
+        $.post("/submit", json, function (data, error, xhr) {
+            document.getElementById("output").innerHTML = data;
+            document.getElementById("error").innerHTML = error;
+        });
+    });
+</script>
+</body>
+</html>
